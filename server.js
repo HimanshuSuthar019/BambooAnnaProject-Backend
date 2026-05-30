@@ -11,10 +11,13 @@ dotenv.config();
 const app = express();
 
 app.use(cors({
-  origin: [
-    "https://bamboo-anna-project-6udq.vercel.app",
-    "http://localhost:5173"
-  ],
+  origin: function(origin, callback) {
+    if (!origin || origin.includes("localhost") || origin.includes("vercel.app")) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
 }));
 
